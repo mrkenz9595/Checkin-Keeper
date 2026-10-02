@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Checkin Keeper</string>
+    <string name="app_subtitle">Thử nghiệm giữ kết nối FCM ổn định.</string>
+    <string name="notification_channel_name">Dịch vụ Checkin Keeper</string>
+    <string name="notification_channel_desc">Duy trì dịch vụ chạy nền định kỳ gửi tín hiệu FCM/GMS Heartbeat</string>
+    <string name="notification_title">Checkin Keeper đang hoạt động</string>
+    <string name="notification_text">Định kỳ gửi heartbeat đánh thức FCM GMS</string>
+    <string name="action_trigger_now">Kích hoạt ngay</string>
+</resources>

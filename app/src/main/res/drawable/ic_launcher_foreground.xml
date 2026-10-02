@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Shield Outline / Base -->
+    <path
+        android:fillColor="#1E293B"
+        android:strokeColor="#38BDF8"
+        android:strokeWidth="2.5"
+        android:strokeLineJoin="round"
+        android:pathData="M54,26 L76,34 C76,54 66,69 54,78 C42,69 32,54 32,34 Z" />
+
+    <!-- Pulse Signal Wave 1 -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M44,48 C47,44 51,42 54,42 C57,42 61,44 64,48" />
+
+    <!-- Pulse Signal Wave 2 -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#38BDF8"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M40,43 C44,38 49,35 54,35 C59,35 64,38 68,43" />
+
+    <!-- Central Notification / Heartbeat Symbol -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,48 C51.8,48 50,49.8 50,52 L50,58 C48.5,59.2 48,60.5 48,62 L60,62 C60,60.5 59.5,59.2 58,58 L58,52 C58,49.8 56.2,48 54,48 Z" />
+
+    <!-- Bell Clapper / Heartbeat dot -->
+    <path
+        android:fillColor="#00E5FF"
+        android:pathData="M54,64 C55.1,64 56,63.1 56,62 L52,62 C52,63.1 52.9,64 54,64 Z" />
+
+    <!-- Keep-alive Lightning bolt / Spark -->
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M54,66 L52,70 L55,70 L53,74 L57,69 L54,69 Z" />
+
+</vector>

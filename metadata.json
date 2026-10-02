@@ -1,0 +1,7 @@
+{
+  "name": "Checkin Keeper",
+  "description": "Ứng dụng giữ kết nối FCM ổn định trên thiết bị Android/HyperOS ROM nội địa bằng cơ chế định kỳ gửi Intent đánh thức GMS.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
