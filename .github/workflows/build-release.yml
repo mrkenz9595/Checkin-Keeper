@@ -53,10 +53,32 @@ jobs:
           chmod +x gradlew
           ./gradlew --version
 
-      - name: Decode Keystore (Optional)
-        if: env.KEYSTORE_BASE64 != ''
+      - name: Setup Keystores for Debug and Release Signing
         run: |
-          echo "$KEYSTORE_BASE64" | base64 --decode > my-upload-key.jks
+          echo "=== Setting up Keystores ==="
+
+          # 1. Setup debug.keystore
+          if [ ! -f "debug.keystore" ]; then
+            if [ -f "debug.keystore.base64" ]; then
+              echo "Decoding debug.keystore from debug.keystore.base64..."
+              base64 -d debug.keystore.base64 > debug.keystore
+            else
+              echo "Generating fresh debug.keystore via keytool..."
+              keytool -genkeypair -v -keystore debug.keystore -alias androiddebugkey -keypass android -storepass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+            fi
+          fi
+
+          # 2. Setup release keystore (my-upload-key.jks)
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "Decoding release keystore from KEYSTORE_BASE64 secret..."
+            echo "$KEYSTORE_BASE64" | base64 --decode > my-upload-key.jks
+          elif [ ! -f "my-upload-key.jks" ]; then
+            echo "Auto-generating self-signed release keystore (my-upload-key.jks)..."
+            keytool -genkeypair -v -keystore my-upload-key.jks -alias upload -keypass android -storepass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Checkin Keeper,O=Release,C=US"
+          fi
+
+          echo "Keystore setup complete. Available signing files:"
+          ls -lh *.keystore *.jks 2>/dev/null || true
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
 
@@ -70,10 +92,10 @@ jobs:
         if: github.event_name == 'push' || github.event.inputs.build_type == 'all' || github.event.inputs.build_type == 'release'
         run: ./gradlew assembleRelease --stacktrace
         env:
-          KEYSTORE_PATH: ${{ secrets.KEYSTORE_PATH }}
-          STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEYSTORE_PATH: my-upload-key.jks
+          STORE_PASSWORD: ${{ secrets.STORE_PASSWORD || 'android' }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS || 'upload' }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD || 'android' }}
 
       - name: Organize Artifacts
         id: prepare_artifacts

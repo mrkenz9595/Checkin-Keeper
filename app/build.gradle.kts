@@ -29,13 +29,24 @@ android {
       val keystoreFile = file(keystorePath)
       if (keystoreFile.exists()) {
         storeFile = keystoreFile
-        storePassword = System.getenv("STORE_PASSWORD")
+        storePassword = System.getenv("STORE_PASSWORD") ?: "android"
         keyAlias = System.getenv("KEY_ALIAS") ?: "upload"
-        keyPassword = System.getenv("KEY_PASSWORD")
+        keyPassword = System.getenv("KEY_PASSWORD") ?: "android"
+      } else {
+        val debugKeystoreFile = file("${rootDir}/debug.keystore")
+        if (debugKeystoreFile.exists()) {
+          storeFile = debugKeystoreFile
+          storePassword = "android"
+          keyAlias = "androiddebugkey"
+          keyPassword = "android"
+        }
       }
     }
     create("debugConfig") {
-      storeFile = file("${rootDir}/debug.keystore")
+      val debugKeystoreFile = file("${rootDir}/debug.keystore")
+      if (debugKeystoreFile.exists()) {
+        storeFile = debugKeystoreFile
+      }
       storePassword = "android"
       keyAlias = "androiddebugkey"
       keyPassword = "android"
@@ -49,13 +60,21 @@ android {
       isShrinkResources = true
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
       val releaseConfig = signingConfigs.findByName("release")
+      val debugConfig = signingConfigs.findByName("debugConfig")
       signingConfig = if (releaseConfig?.storeFile != null && releaseConfig.storeFile?.exists() == true) {
         releaseConfig
+      } else if (debugConfig?.storeFile != null && debugConfig.storeFile?.exists() == true) {
+        debugConfig
       } else {
-        signingConfigs.getByName("debugConfig")
+        null
       }
     }
-    debug { signingConfig = signingConfigs.getByName("debugConfig") }
+    debug {
+      val debugConfig = signingConfigs.findByName("debugConfig")
+      if (debugConfig?.storeFile != null && debugConfig.storeFile?.exists() == true) {
+        signingConfig = debugConfig
+      }
+    }
   }
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_11
