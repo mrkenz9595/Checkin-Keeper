@@ -1,21 +1,33 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# Checkin Keeper R8 / ProGuard Configuration
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Preserve line numbers for stack traces
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Preserve Jetpack Compose runtime
+-keep class androidx.compose.runtime.** { *; }
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Keep data models used with JSON / SharedPreferences
+-keepclassmembers class com.example.keeper.data.** { *; }
+-keep class com.example.keeper.data.** { *; }
+
+# Keep Services, BroadcastReceivers, and Core triggers
+-keep class com.example.keeper.service.KeepAliveService { *; }
+-keep class com.example.keeper.receiver.AlarmReceiver { *; }
+-keep class com.example.keeper.receiver.BootReceiver { *; }
+-keep class com.example.keeper.trigger.FcmTrigger { *; }
+
+# Keep Android system components & entry points
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+
+# Don't warn on optional Google Play Services / vendor packages
+-dontwarn com.google.android.gms.**
+-dontwarn android.os.PowerManager
+-dontwarn android.net.ConnectivityManager
+
+# Optimize aggressive code shrinking while keeping safety
+-repackageclasses ''
+-allowaccessmodification
